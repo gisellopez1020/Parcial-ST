@@ -68,18 +68,6 @@ Este proyecto implementa una solución completa de despliegue seguro, monitoreo 
 
 ## Instalación y Despliegue
 
-### Requisitos Previos
-```bash
-# Sistema Operativo
-Ubuntu 20.04 o superior
-
-# Software necesario
-- Docker 20.10+
-- Docker Compose 1.29+
-- Git
-- OpenSSL
-```
-
 ### Paso 1: Clonar los Repositorios Necesarios
 ```bash
 # Clonar este repositorio del parcial
