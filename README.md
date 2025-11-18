@@ -350,6 +350,7 @@ parcial-telematicos/
    ![AWS Security Group](evidencias/AWS-Security-Group.png)
 
    - Aplicación accesible desde IP pública
+   ![AWS App](evidencias/AWS-App.png)
 
 ---
 
