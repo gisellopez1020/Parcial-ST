@@ -68,18 +68,6 @@ Este proyecto implementa una solución completa de despliegue seguro, monitoreo 
 
 ## Instalación y Despliegue
 
-### Requisitos Previos
-```bash
-# Sistema Operativo
-Ubuntu 20.04 o superior
-
-# Software necesario
-- Docker 20.10+
-- Docker Compose 1.29+
-- Git
-- OpenSSL
-```
-
 ### Paso 1: Clonar los Repositorios Necesarios
 ```bash
 # Clonar este repositorio del parcial
@@ -276,9 +264,10 @@ docker-compose --version
 ```bash
 # Clonar repositorio
 git clone https://github.com/gisellopez1020/Parcial-ST.git
-cd parcial-telematicos
+cd Parcial-ST
 
 # Generar certificados
+chmod +x generate-ssl.sh
 ./generate-ssl.sh
 
 # Levantar servicios
