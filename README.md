@@ -264,7 +264,7 @@ docker-compose --version
 ```bash
 # Clonar repositorio
 git clone https://github.com/gisellopez1020/Parcial-ST.git
-cd parcial-telematicos
+cd Parcial-ST
 
 # Generar certificados
 ./generate-ssl.sh
