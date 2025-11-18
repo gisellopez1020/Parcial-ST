@@ -1,0 +1,41 @@
+# Certificados SSL (no compartir en producción)
+nginx/ssl/*.key
+nginx/ssl/*.crt
+nginx/ssl/*.pem
+
+# vagrant
+.vagrant/
+
+# Datos de Docker volumes
+prometheus-data/
+grafana-data/
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Variables de entorno sensibles
+.env
+.env.local
+.env.*.local
+
+# Backups
+*.bak
+backup/
+
+# AWS
+*.pem
+aws-credentials.txt

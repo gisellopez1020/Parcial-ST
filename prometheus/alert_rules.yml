@@ -1,0 +1,58 @@
+groups:
+  - name: system_alerts
+    interval: 30s
+    rules:
+      # Alerta cuando el uso de CPU supera el 80%
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 2m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "Alto uso de CPU en {{ $labels.instance }}"
+          description: "El uso de CPU ha superado el 80% durante más de 2 minutos. Valor actual: {{ $value | humanize }}%"
+
+      # Alerta cuando el uso de memoria supera el 85%
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 3m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "Alto uso de memoria en {{ $labels.instance }}"
+          description: "El uso de memoria ha superado el 85% durante más de 3 minutos. Valor actual: {{ $value | humanize }}%"
+
+      # Alerta cuando el espacio en disco supera el 80%
+      - alert: HighDiskUsage
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes)) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+          category: storage
+        annotations:
+          summary: "Alto uso de disco en {{ $labels.instance }}"
+          description: "El uso de disco en {{ $labels.mountpoint }} ha superado el 80%. Valor actual: {{ $value | humanize }}%"
+
+      # Alerta cuando un nodo está caído
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          category: availability
+        annotations:
+          summary: "Instancia {{ $labels.instance }} está caída"
+          description: "La instancia {{ $labels.instance }} del job {{ $labels.job }} no responde durante más de 1 minuto."
+
+      # Alerta cuando la carga del sistema es muy alta
+      - alert: HighSystemLoad
+        expr: node_load15 / count without(cpu, mode) (node_cpu_seconds_total{mode="system"}) > 2
+        for: 5m
+        labels:
+          severity: warning
+          category: performance
+        annotations:
+          summary: "Carga del sistema alta en {{ $labels.instance }}"
+          description: "La carga promedio de 15 minutos es más del doble del número de CPUs. Valor actual: {{ $value | humanize }}"

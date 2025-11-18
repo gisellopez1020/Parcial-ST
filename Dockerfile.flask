@@ -1,0 +1,54 @@
+# Dockerfile para MiniWebApp Flask con Nginx y SSL
+
+FROM python:3.9-slim
+
+ENV PYTHONUNBUFFERED=1
+
+# Instalar Nginx, supervisor y dependencias para mysqlclient / MySQLdb
+RUN apt-get update && apt-get install -y \
+    nginx \
+    supervisor \
+    openssl \
+    default-libmysqlclient-dev \
+    build-essential \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Crear directorios necesarios
+RUN mkdir -p /app /var/log/supervisor /etc/nginx/ssl
+
+# Definir directorio de trabajo
+WORKDIR /app
+
+# Copiar la aplicación Flask
+COPY app/ /app/
+
+# Instalar dependencias de Python (Flask + MySQL)
+RUN python -m pip install --upgrade pip && \
+    if [ -f requirements.txt ]; then \
+        pip install --no-cache-dir -r requirements.txt; \
+    fi && \
+    pip install --no-cache-dir \
+      Flask==2.3.3 \
+      Flask-SQLAlchemy \
+      Flask-MySQLdb \
+      flask-cors \
+      mysqlclient
+
+# Copiar configuración de Nginx para Flask
+COPY nginx/nginx-flask.conf /etc/nginx/sites-available/default
+RUN rm -f /etc/nginx/sites-enabled/default && \
+    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
+# Copiar certificados SSL
+COPY nginx/ssl/nginx.crt /etc/nginx/ssl/
+COPY nginx/ssl/nginx.key /etc/nginx/ssl/
+
+# Copiar configuración de supervisor
+COPY supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Exponer puertos
+EXPOSE 80 443 5000
+
+# Iniciar supervisor (maneja Flask y Nginx juntos)
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
