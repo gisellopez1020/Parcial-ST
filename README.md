@@ -267,6 +267,7 @@ git clone https://github.com/gisellopez1020/Parcial-ST.git
 cd Parcial-ST
 
 # Generar certificados
+chmod +x generate-ssl.sh
 ./generate-ssl.sh
 
 # Levantar servicios
